@@ -1,5 +1,5 @@
 # lokyr-batches
-The service to manage production and ingredient batches, and their relations.
+Service to manage production and ingredient batches, and their relations.
 
 ## Motivation
 
