@@ -139,7 +139,6 @@ We store these pieces of information per production batch:
 
 * lokyr batch name (e.g. "L2018-51")
 * product (strawberry mead, raspberry mead, ginger beer, ...)
-* best before date
 * batch size (liters)
 * status: currently in production?
 * bottling record
