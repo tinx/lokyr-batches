@@ -1,0 +1,88 @@
+swagger: "2.0"
+produces:
+  - "application/json"
+consumes:
+  - "application/json"
+schemes: "https"
+basePath: "/v1/"
+security:
+  type: "basic"
+  description: "HTTP Basic Authentication with pre-shared credentials."
+info:
+  title: "Lokyr Batches"
+  description: "This services manages production and ingredient batches."
+  version: "1.0.0"
+  contact:
+    name: "Lokyr Support"
+    email: "info@lokyr.com"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+paths:
+  "/batch/production":
+    post:
+      operationId: "productionBatchCreate"
+      summary: "Add a new production batch"
+      description: |
+        Create a new production batch record and insert it into the
+        database.
+      parameters:
+        - name: "productTypeId"
+          in: "body"
+          description: "ID of the type of product to be produced."
+          required: true
+          type: "integer"
+        - name: "size"
+          description: "Size of the production batch, in liters."
+          in: "body"
+          required: true
+          type: "integer"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/productionBatch"
+        400:
+          description: "Invalid batch size supplied."
+        404:
+          description: "productTypeId not found."
+    get:
+      operationId: "productionBatchList"
+      summary: "Return all production batches that the user has access to."
+      description: |
+        This returns a list of production batches. There is no
+        pagination. The entire list will be returned in one response.
+      parameters: []
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/productionBatch"
+  "/batch/production/{batchId}":
+    delete:
+      operationId: "productionBatchDelete"
+      summary: "Delete the referenced production batch from the database."
+      description: |
+        Removes the record of the production batch. This operation
+        is only possible if there are no other records linked to
+        this one.
+
+        If any inspection reports, documents, split batches or other
+        records reference a production batch, it can not be deleted.
+      parameters:
+        - name: "batchId"
+          in: "path"
+          description: "ID of the batch to delete."
+          required: true
+          type: "integer"
+          format: "int64"
+      responses:
+        200:
+          description: "successful operation"
+        400:
+          description: "invalid ID supplied"
+        404:
+          description: "batch not found"
+
