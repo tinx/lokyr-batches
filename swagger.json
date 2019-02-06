@@ -92,7 +92,7 @@ definitions:
         type: "integer"
         format: "int64"
         description: "ID of this production batch."
-	readOnly: true
+        readOnly: true
       productTypeId:
         type: "integer"
         format: "int64"
