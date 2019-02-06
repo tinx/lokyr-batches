@@ -141,10 +141,14 @@ We store these pieces of information per production batch:
 * product (strawberry mead, raspberry mead, ginger beer, ...)
 * batch size (liters)
 * status: currently in production?
-* bottling record
+* bottling date
+* best before date
+* alcohol content
 
 Production batches SHOULD be referenced to have:
 
+* retained sample (sample)
+* lab sample (sample)
 * laboratory result reports (document)
 * fermentation start (event)
 * alcohol measurement (event)
@@ -171,15 +175,6 @@ Production batches SHOULD be referenced to have:
 * source production batch B
 * date of blend
 * destination production batch
-
-## Production Batch Bottling
-
-* production batch
-* bottling date
-* retained sample location
-* retained sample label
-* best before date
-* alcohol content
 
 ## Production Batch Inspection Reports
 
@@ -228,4 +223,10 @@ bottling, filtering steps, rackings, fermentation start, etc.
 * amount
 * recipient name
 * recipient ID in CRM (future use)
+
+## Sample
+
+* production batch
+* sample date
+* sample purpose (one of "lab analysis", "retained sample")
 
