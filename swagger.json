@@ -3,11 +3,15 @@ produces:
   - "application/json"
 consumes:
   - "application/json"
-schemes: "https"
+schemes:
+  - "https"
 basePath: "/v1/"
+securityDefinitions:
+  generic:
+    type: "basic"
+    description: "HTTP Basic Authentication with pre-shared credentials."
 security:
-  type: "basic"
-  description: "HTTP Basic Authentication with pre-shared credentials."
+  - "generic": []
 info:
   title: "Lokyr Batches"
   description: "This services manages production and ingredient batches."
@@ -97,7 +101,7 @@ definitions:
         type: "integer"
         format: "int64"
         description: "ID of the type of product to be produced."
-      name: "size"
+      size:
         type: "integer"
         format: "int64"
         description: "Size of the production batch, in liters."
