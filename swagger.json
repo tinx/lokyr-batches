@@ -25,18 +25,14 @@ paths:
       summary: "Add a new production batch"
       description: |
         Create a new production batch record and insert it into the
-        database.
+        database. The initial status will be 'setup'.
       parameters:
-        - name: "productTypeId"
+        - name: "body"
           in: "body"
-          description: "ID of the type of product to be produced."
+          description: "Batch production object."
           required: true
-          type: "integer"
-        - name: "size"
-          description: "Size of the production batch, in liters."
-          in: "body"
-          required: true
-          type: "integer"
+          schema:
+            $ref: '#/definitions/productionBatch'
       responses:
         200:
           description: "successful operation"
@@ -85,4 +81,60 @@ paths:
           description: "invalid ID supplied"
         404:
           description: "batch not found"
+definitions:
+  productionBatch:
+    type: "object"
+    required:
+      - productTypeId
+      - size
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+        description: "ID of this production batch."
+	readOnly: true
+      productTypeId:
+        type: "integer"
+        format: "int64"
+        description: "ID of the type of product to be produced."
+      name: "size"
+        type: "integer"
+        format: "int64"
+        description: "Size of the production batch, in liters."
+      status:
+        type: "string"
+        description: "Production status of this batch."
+        enum:
+          - "setup"
+          - "fermenting"
+          - "partially filtered"
+          - "filtered"
+          - "ready for bottling"
+          - "bottled"
+          - "gone"
+        readOnly: true
+      bottlingDate:
+        type: "string"
+        format: "date"
+        description: |
+          Date of bottling of this production batch. Note that batches
+          can't be partially bottled. Split the batch before bottling
+          if you aren't bottling the entire volume.
+        readOnly: true
+      bestBeforeDate:
+        type: "string"
+        format: "date"
+        description: |
+          Guaranteed 'best before' date for the bottled product. Note that
+          the best before date will only be set for batches that have been
+          bottled.
+        readOnly: true
+      alcoholContent:
+        type: "number"
+        format: "float"
+        description: |
+          Alcohol content (in percent per volume) of the production batch
+          when it was bottled. The alcohol content at other times during
+          the production process can be recorded as a measurement entry.
+        readOnly: true
 
