@@ -1,3 +1,4 @@
+---
 swagger: "2.0"
 produces:
   - "application/json"
@@ -7,11 +8,11 @@ schemes:
   - "https"
 basePath: "/v1/"
 securityDefinitions:
-  generic:
+  basic_auth:
     type: "basic"
     description: "HTTP Basic Authentication with pre-shared credentials."
 security:
-  - "generic": []
+  - "basic_auth": []
 info:
   title: "Lokyr Batches"
   description: "This services manages production and ingredient batches."
@@ -25,6 +26,8 @@ info:
 paths:
   "/batch/production":
     get:
+      tags:
+        - "production batch"
       operationId: "productionBatchList"
       summary: "List all production batches"
       description: >
@@ -41,6 +44,8 @@ paths:
             items:
               $ref: "#/definitions/productionBatch"
     post:
+      tags:
+        - "production batch"
       operationId: "productionBatchCreate"
       summary: "Add a new production batch"
       description: >
@@ -64,6 +69,8 @@ paths:
           description: "productTypeId not found."
   "/batch/production/{batchId}":
     get:
+      tags:
+        - "production batch"
       operationId: "productionBatchRead"
       summary: "Read production batch"
       description: >
@@ -85,12 +92,20 @@ paths:
         404:
           description: "batchId not found."
     put:
+      tags:
+        - "production batch"
       operationId: "productionBatchUpdate"
       summary: "Update production batch"
       description: >
-        Update production batch properties. Setting the status to
-        'bottled' is a special operation and requires also setting the
-        'bestBeforeDate' and 'alcoholContent' fields.
+        Update production batch properties.
+
+        Setting the status to 'bottled' is a special operation and
+        requires also setting the 'bottlingDate', 'bestBeforeDate' and
+        'alcoholContent' fields.
+
+        These three fields can only be set when the status is being
+        changed to 'bottled'. 'alcoholContent' can also be changed
+        again.
       parameters:
         - name: "batchId"
           in: "path"
@@ -114,6 +129,8 @@ paths:
         404:
           description: "productTypeId not found."
     delete:
+      tags:
+        - "production batch"
       operationId: "productionBatchDelete"
       summary: "Delete production batch"
       description: >
@@ -161,13 +178,13 @@ definitions:
         type: "string"
         title: "Production status of this batch."
         description: >
-          This describes that production status, or phase, of this
+          This describes the production status, or phase, of this
           batch. The status can only be updated following the forward
           progression.
 
           Changing the status to 'bottled' requires also updating
-          the fields 'bestBeforeDate' and 'alcoholContent' in the
-          same request.
+          the fields 'bottlingDate', 'bestBeforeDate' and
+          'alcoholContent' in the same request.
         enum:
           - "setup"
           - "fermenting"
@@ -205,3 +222,4 @@ definitions:
 
           Information on the alcohol content at other times during the
           production process can be recorded as a 'measurement' entry.
+
