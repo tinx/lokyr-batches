@@ -24,10 +24,26 @@ info:
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
 paths:
   "/batch/production":
+    get:
+      operationId: "productionBatchList"
+      summary: "List all production batches"
+      description: >
+        This returns a list of production batches. There is no
+        pagination. The entire list will be returned in one response.
+        The list will only contain those batches that the user has
+        access to.
+      parameters: []
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/productionBatch"
     post:
       operationId: "productionBatchCreate"
       summary: "Add a new production batch"
-      description: |
+      description: >
         Create a new production batch record and insert it into the
         database. The initial status will be 'setup'.
       parameters:
@@ -46,27 +62,32 @@ paths:
           description: "Invalid batch size supplied."
         404:
           description: "productTypeId not found."
+  "/batch/production/{batchId}":
     get:
-      operationId: "productionBatchList"
-      summary: "List all production batches"
-      description: |
-        This returns a list of production batches. There is no
-        pagination. The entire list will be returned in one response.
-        The list will only contain those batches that the user has
-        access to.
-      parameters: []
+      operationId: "productionBatchRead"
+      summary: "Read production batch"
+      description: >
+        Fetch information on a specific production batch.
+      parameters:
+        - name: "batchId"
+          in: "path"
+          description: "ID of the batch to update."
+          required: true
+          type: "integer"
+          format: "int64"
       responses:
         200:
           description: "successful operation"
           schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/productionBatch"
-  "/batch/production/{batchId}":
+            $ref: "#/definitions/productionBatch"
+        400:
+          description: "Invalid batchId supplied."
+        404:
+          description: "batchId not found."
     put:
       operationId: "productionBatchUpdate"
       summary: "Update production batch"
-      description: |
+      description: >
         Update production batch properties. Setting the status to
         'bottled' is a special operation and requires also setting the
         'bestBeforeDate' and 'alcoholContent' fields.
@@ -95,7 +116,7 @@ paths:
     delete:
       operationId: "productionBatchDelete"
       summary: "Delete production batch"
-      description: |
+      description: >
         Removes the record of the production batch. This operation
         is only possible if there are no other records linked to
         this one.
@@ -139,7 +160,7 @@ definitions:
       status:
         type: "string"
         title: "Production status of this batch."
-        description: |
+        description: >
           This describes that production status, or phase, of this
           batch. The status can only be updated following the forward
           progression.
@@ -159,7 +180,7 @@ definitions:
         type: "string"
         format: "date"
         title: "Date of bottling of this batch."
-        description: |
+        description: >
           Date of bottling of this production batch. Note that batches
           can't be partially bottled. Split the batch before bottling
           if you aren't bottling the entire volume.
@@ -167,7 +188,7 @@ definitions:
         type: "string"
         format: "date"
         title: "Guaranteed minimum shelf life."
-        description: |
+        description: >
           Guaranteed 'best before' date for the bottled product. Note that
           the best before date must be set for batches when the status is
           set to 'bottled' and can't be set before that.
@@ -176,10 +197,11 @@ definitions:
         type: "number"
         format: "float"
         title: "Per volume content of alcohol."
-        description: |
+        description: >
           Alcohol content (in percent per volume) of the production batch
           when it was bottled. This value must be set when the status
-          is changed to 'bottled' and can't be set before that.
+          is changed to 'bottled' and can't be set before that. It can
+          be changed, later, though.
 
           Information on the alcohol content at other times during the
           production process can be recorded as a 'measurement' entry.
