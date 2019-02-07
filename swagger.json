@@ -239,7 +239,7 @@ paths:
           description: "product not found."
     delete:
       tags:
-        - "produc"
+        - "product"
       operationId: "productDelete"
       summary: "Delete product"
       description: >
@@ -336,9 +336,9 @@ definitions:
       id:
         type: "integer"
         format: "int64"
-        title: "ID of this product typr."
+        title: "ID of this product."
         readOnly: true
       name:
         type: "string"
-        title: "Unique name of this product type."
+        title: "Unique name of this product."
 
