@@ -452,7 +452,7 @@ paths:
           required: true
           type: "integer"
           format: "int64"
-        - name: "eventId"
+        - name: "shipmentId"
           in: "path"
           description: "ID of the shipment."
           required: true
@@ -481,7 +481,7 @@ paths:
           required: true
           type: "integer"
           format: "int64"
-        - name: "eventId"
+        - name: "shipmentId"
           in: "path"
           description: "ID of the shipment."
           required: true
@@ -510,7 +510,7 @@ paths:
       operationId: "productionBatchShipmentDelete"
       summary: "Delete a production batch shipment."
       parameters:
-        - name: "batchId"
+        - name: "shipmentId"
           in: "path"
           description: "ID of the production batch."
           required: true
