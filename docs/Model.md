@@ -191,13 +191,14 @@ bottling, filtering steps, rackings, fermentation start, etc.
 * name
 * class (one of "measurement", "production step", "other")
 
-## Recipient
+## Shipments
 
 * production batch
 * delivery date
 * delivery units
-* amount
+* delivery amount
 * recipient name
+* recipient address
 * recipient ID in CRM (future use)
 
 ## Sample

@@ -386,6 +386,149 @@ paths:
           description: "Invalid batchId or eventId supplied."
         404:
           description: "batch or event not found."
+  "/batch/production/{batchId}/shipment":
+    get:
+      tags:
+        - "production batch shipment"
+      operationId: "productionBatchShipmentList"
+      summary: "Get a list of production batch shipments."
+      parameters:
+        - name: "batchId"
+          in: "path"
+          description: "ID of the production batch."
+          required: true
+          type: "integer"
+          format: "int64"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/shipment"
+        400:
+          description: "Invalid batchId supplied."
+        404:
+          description: "batch not found."
+    post:
+      tags:
+        - "production batch shipment"
+      operationId: "productionBatchShipmentCreate"
+      summary: "Add production batch shipment"
+      description: >
+        Add a shipment record to a production batch.
+      parameters:
+        - name: "batchId"
+          in: "path"
+          description: "ID of the batch."
+          required: true
+          type: "integer"
+          format: "int64"
+        - name: "body"
+          in: "body"
+          description: "The shipment record to add."
+          required: true
+          schema:
+            $ref: '#/definitions/shipment'
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/shipment"
+        400:
+          description: "Invalid batchId supplied."
+        404:
+          description: "batch not found."
+  "/batch/production/{batchId}/shipment/{shipmentId}":
+    get:
+      tags:
+        - "production batch shipment"
+      operationId: "productionBatchShipmentRead"
+      summary: "Fetch a production batch shipment."
+      parameters:
+        - name: "batchId"
+          in: "path"
+          description: "ID of the production batch."
+          required: true
+          type: "integer"
+          format: "int64"
+        - name: "eventId"
+          in: "path"
+          description: "ID of the shipment."
+          required: true
+          type: "integer"
+          format: "int64"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/shipment"
+        400:
+          description: "Invalid batchId or shipmentId supplied."
+        404:
+          description: "batch or shipment not found."
+    put:
+      tags:
+        - "production batch shipment"
+      operationId: "productionBatchShipmentUpdate"
+      summary: "Update a production batch shipment."
+      parameters:
+        - name: "batchId"
+          in: "path"
+          description: "ID of the production batch."
+          required: true
+          type: "integer"
+          format: "int64"
+        - name: "eventId"
+          in: "path"
+          description: "ID of the shipment."
+          required: true
+          type: "integer"
+          format: "int64"
+        - name: "body"
+          in: "body"
+          description: "The shipment record."
+          required: true
+          schema:
+            $ref: '#/definitions/shipment'
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/shipment"
+        400:
+          description: "Invalid batchId or shipmentId supplied."
+        404:
+          description: "batch or shipment not found."
+    delete:
+      tags:
+        - "production batch shipment"
+      operationId: "productionBatchShipmentDelete"
+      summary: "Delete a production batch shipment."
+      parameters:
+        - name: "batchId"
+          in: "path"
+          description: "ID of the production batch."
+          required: true
+          type: "integer"
+          format: "int64"
+        - name: "eventId"
+          in: "path"
+          description: "ID of the shipment."
+          required: true
+          type: "integer"
+          format: "int64"
+      responses:
+        200:
+          description: "successful operation"
+        400:
+          description: "Invalid batchId or shipmentId supplied."
+        404:
+          description: "batch or shipment not found."
   "/product":
     get:
       tags:
@@ -735,7 +878,7 @@ definitions:
       id:
         type: "integer"
         format: "int64"
-        title: "ID of this product."
+        title: "ID of this event."
         readOnly: true
       type:
         type: "integer"
@@ -765,7 +908,7 @@ definitions:
       id:
         type: "integer"
         format: "int64"
-        title: "ID of this product."
+        title: "ID of this event type."
         readOnly: true
       name:
         type: "string" 
@@ -777,4 +920,62 @@ definitions:
           - "measurement"
           - "production step"
           - "other"
+  shipment:
+    type: "object"
+    required:
+      - name
+      - address
+      - productionBatchId
+      - date
+      - units
+      - amount
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+        title: "ID of this shipment."
+        readOnly: true
+      productionBatchId:
+        type: "integer"
+        format: "int64"
+        title: "Production batch ID."
+      name:
+        type: "string" 
+        title: "Name of the recipient."
+      address:
+        type: "string" 
+        title: "Address of the recipient."
+      recipientId:
+        type: "string"
+        title: "Reference ID for recipient (future use)"
+        description: >
+          This property is for future use. At the moment there is no
+          CRM or address database to link to, but if one were added,
+          this ID could be used to reference records in that system.
+      date:
+        type: "string"
+        format: "date"
+        title: "Date of delivery."
+      units:
+        type: "string"
+        title: "Units used to deliver."
+        enum:
+          - "bottles (0.75l)"
+          - "bottles (0.5l)"
+          - "liters"
+      amount:
+        type: "integer"
+        format: "uint64"
+        title: "Amount of units shipped."
+      properties:
+        type: "object"
+        title: "Arbitrary key-value data."
+        description: >
+          Arbitrary data to be stored for this shipment. Key and value have
+          to be strings. Storing an empty value ("") will remove the
+          key entirely.
+          Omitting existing keys does not remove them. The property maps
+          will be merged.
+        additionalProperties:
+          type: "string"
 
