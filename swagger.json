@@ -50,7 +50,8 @@ paths:
       summary: "Add a new production batch"
       description: >
         Create a new production batch record and insert it into the
-        database. The initial status will be 'setup'.
+        database. The initial status will be 'setup'. If no batch name is
+        specified, a name will be auto-generated.
       parameters:
         - name: "body"
           in: "body"
@@ -191,6 +192,44 @@ paths:
           description: "Invalid batchId or size supplied."
         404:
           description: "batch not found."
+  "/batch/production/{batchId}/blend":
+    post:
+      tags:
+        - "production batch"
+      operationId: "productionBatchBlend"
+      summary: "Blend production batches"
+      description: >
+        Combine (blend) two production batches, resulting in a new
+        production batch containing the entire volumes of both
+        source batches.
+
+        The state of both source batches will be set to 'gone'.
+
+        The state of the new batch will be the least advanced state
+        of either source batch. Reports, documents, measurements and
+        other batch specific records will not be copied.
+      parameters:
+        - name: "batchId"
+          in: "path"
+          description: "ID of the either batch of the blend."
+          required: true
+          type: "integer"
+          format: "int64"
+        - name: "secondBatchId"
+          in: "query"
+          description: "ID of the other batch to be added to the blend."
+          required: true
+          type: "integer"
+          format: "int64"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/productionBatch"
+        400:
+          description: "Invalid batchId supplied."
+        404:
+          description: "batch not found."
   "/product":
     get:
       tags:
@@ -313,10 +352,38 @@ definitions:
         type: "integer"
         format: "int64"
         title: "ID of the type of product to be produced."
+      name:
+        type: "string"
+        title: "Name of this batch."
       size:
         type: "integer"
         format: "int64"
         title: "Size of the production batch, in liters."
+      parentBatches:
+        type: "array"
+        items:
+          type: "integer"
+          format: "int64"
+        title: "ID(s) of the parent batch(es)."
+        minItems: 0
+        maxItems: 2
+        description: >
+          If set, this indicates that this batch was created by splitting
+          another production batch in two, or by blending two other
+          production batches. The original batch IDs are given
+          in this paramter. If empty, indicates that this batch was
+          created from scratch.
+        readOnly: true
+      childBatches:
+        type: "array"
+        items:
+          type: "integer"
+          format: "int64"
+        title: "IDs of child batches."
+        description: >
+          A list of batch IDs referencing production batches that have
+          been created by splitting off amounts off of this batch.
+        readOnly: true
       status:
         type: "string"
         title: "Production status of this batch."
