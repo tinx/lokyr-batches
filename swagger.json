@@ -243,6 +243,17 @@ paths:
           required: true
           type: "integer"
           format: "int64"
+        - name: "class"
+          in: "query"
+          description: "Event classes to filter by."
+          type: "array"
+          items:
+            type: "string"
+            enum:
+              - "measurement"
+              - "production step"
+              - "other"
+          collectionFormat: "multi"
       responses:
         200:
           description: "successful operation"
@@ -691,6 +702,17 @@ definitions:
 
           Information on the alcohol content at other times during the
           production process can be recorded as a 'measurement' entry.
+      properties:
+        type: "object"
+        title: "Arbitrary key-value data."
+        description: >
+          Arbitrary data to be stored for this batch. Key and value have
+          to be strings. Storing an empty value ("") will remove the
+          key entirely.
+          Omitting existing keys does not remove them. The property maps
+          will be merged.
+        additionalProperties:
+          type: "string"
   product:
     type: "object"
     required:
@@ -723,10 +745,17 @@ definitions:
         type: "string"
         format: "dateTime"
         title: "Date and time when the event took place."
-      data:
+      properies:
         type: "object"
         title: "Arbitrary key-value data."
-        additionalProperties: true
+        description: >
+          Arbitrary data to be stored for this event. Key and value have
+          to be strings. Storing an empty value ("") will remove the
+          key entirely.
+          Omitting existing keys does not remove them. The property maps
+          will be merged.
+        additionalProperties:
+          type: "string"
   eventType:
     type: "object"
     required:

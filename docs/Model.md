@@ -39,6 +39,7 @@ We store these pieces of information per ingredient batch:
 * procurement amount
 * best before date
 * status: available for production?
+* properties (arbitraty key-value data, stored as JSON string)
 
 Ingredient batches SHOULD be referenced to have:
 
@@ -73,12 +74,6 @@ Ingredient batches SHOULD be referenced to have:
 * base URL (virtual-host-style URL)
 * read-only credentials (will be given to authenticated micro-service clients)
 * CRUD credentials
-
-## Ingredient Batch Attribute
-
-* ingredient batch
-* key
-* value
 
 ## Ingredient Batch Event
 
@@ -143,6 +138,7 @@ We store these pieces of information per production batch:
 * bottling date
 * best before date
 * alcohol content
+* properties (arbitrary key-value data, stored as JSON string)
 
 Production batches SHOULD be referenced to have:
 
@@ -188,18 +184,12 @@ bottling, filtering steps, rackings, fermentation start, etc.
 * production batch
 * event date
 * event type
-* event data (arbitrary JSON data, interpretation will depend on event type)
+* event properties (key-value data, interpretation will depend on event type)
 
 ## Event Type
 
 * name
 * class (one of "measurement", "production step", "other")
-
-## Production Batch Attribute
-
-* production batch
-* key
-* value
 
 ## Recipient
 
