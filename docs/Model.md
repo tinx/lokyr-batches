@@ -45,7 +45,7 @@ Ingredient batches SHOULD be referenced to have:
 * an invoice (document)
 * a delivery note (document)
 * photos (document)
-* an inspection report (inspection report)
+* an inspection report (ingredient batch event)
 
 ## Documment
 
@@ -80,17 +80,16 @@ Ingredient batches SHOULD be referenced to have:
 * key
 * value
 
-## Inspection Report
+## Ingredient Batch Event
 
-* inspector name
-* inspection date
-* inspection result (one of "passed", "rejected")
-* person ID in people database (future use)
-
-## Ingredient Batch Inspection Reports
+This is intended to enable a timeline of events during batch lifetime,
+such as for taking temperature or other measurements, goods inspections,
+processing steps, etc.
 
 * ingredient batch
-* inpection report
+* event date
+* event type
+* event data (arbitrary JSON data, interpretation will depend on event type)
 
 ## Ingredient
 
@@ -175,27 +174,15 @@ Production batches SHOULD be referenced to have:
 * date of blend
 * destination production batch
 
-## Production Batch Inspection Reports
-
-* production batch
-* inpection report
-
 ## Production Batch Document
 
 * production batch
 * document
 
-## Production Batch Measurement
-
-* production batch
-* type of measurement
-* date of measurement
-* sample value
-
 ## Production Event
 
 This is intended to enable a timeline of events during batch production,
-such as for taking temperature or alcohol measurements, tastings,
+such as for taking temperature or alcohol measurements, tastings, inspections,
 bottling, filtering steps, rackings, fermentation start, etc.
 
 * production batch
@@ -203,9 +190,10 @@ bottling, filtering steps, rackings, fermentation start, etc.
 * event type
 * event data (arbitrary JSON data, interpretation will depend on event type)
 
-## Production Event Type
+## Event Type
 
 * name
+* class (one of "measurement", "production step", "other")
 * display name
 
 ## Production Batch Attribute
