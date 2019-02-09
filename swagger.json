@@ -509,6 +509,10 @@ paths:
         - "production batch shipment"
       operationId: "productionBatchShipmentDelete"
       summary: "Delete a production batch shipment."
+      description: >
+        Removes the record of the product. This operation
+        is only possible if there are no other records linked to
+        this one.
       parameters:
         - name: "batchId"
           in: "path"
