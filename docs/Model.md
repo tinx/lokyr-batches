@@ -194,7 +194,6 @@ bottling, filtering steps, rackings, fermentation start, etc.
 
 * name
 * class (one of "measurement", "production step", "other")
-* display name
 
 ## Production Batch Attribute
 
