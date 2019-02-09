@@ -166,8 +166,7 @@ Production batches SHOULD be referenced to have:
 * source production batch
 * date of split
 * amount (liters)
-* destination production batch A
-* destination production batch B
+* destination production
 
 ## Production Batch Blend
 

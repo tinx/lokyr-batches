@@ -154,6 +154,43 @@ paths:
           description: "invalid ID supplied"
         404:
           description: "batch not found"
+  "/batch/production/{batchId}/split":
+    post:
+      tags:
+        - "production batch"
+      operationId: "productionBatchSplit"
+      summary: "Split production batch"
+      description: >
+        Split a production batch in two. The new production batch
+        is created in the database and it's record returned. The amount
+        specified will be the designated size of the new batch. The
+        size of the original batch will be reduced by this amount.
+
+        The new production batch will inherit the state of the original
+        batch. Reports, documents, measurements and other batch
+        specific records will not be copied.
+      parameters:
+        - name: "batchId"
+          in: "path"
+          description: "ID of the batch to split."
+          required: true
+          type: "integer"
+          format: "int64"
+        - name: "size"
+          in: "query"
+          description: "Amount to split off, in liters."
+          required: true
+          type: "integer"
+          format: "int64"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/productionBatch"
+        400:
+          description: "Invalid batchId or size supplied."
+        404:
+          description: "batch not found."
   "/product":
     get:
       tags:
