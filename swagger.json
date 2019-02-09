@@ -499,7 +499,7 @@ paths:
           schema:
             type: "array"
             items:
-              $ref: '#/eventType'
+              $ref: '#/definitions/eventType'
     post:
       tags:
         - "event type"
