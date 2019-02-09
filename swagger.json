@@ -246,9 +246,9 @@ paths:
       responses:
         200:
           description: "successful operation"
-          type: "array"
-          items:
-            schema:
+          schema:
+            type: "array"
+            items:
               $ref: "#/definitions/event"
         400:
           description: "Invalid batchId supplied."
@@ -307,9 +307,9 @@ paths:
       responses:
         200:
           description: "successful operation"
-          type: "array"
-          items:
-            schema:
+          schema:
+            type: "array"
+            items:
               $ref: "#/definitions/event"
         400:
           description: "Invalid batchId or eventId supplied."
@@ -342,9 +342,9 @@ paths:
       responses:
         200:
           description: "successful operation"
-          type: "array"
-          items:
-            schema:
+          schema:
+            type: "array"
+            items:
               $ref: "#/definitions/event"
         400:
           description: "Invalid batchId or eventId supplied."
