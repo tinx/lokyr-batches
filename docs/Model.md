@@ -33,7 +33,7 @@ We store these pieces of information per ingredient batch:
 * lokyr batch name (e.g. "L2018-51")
 * ingredient
 * manufacturer batch name
-* supplier
+* supplier (third party)
 * delivery date
 * procurement units (milliliters, kilograms, pieces, ...)
 * procurement amount
@@ -89,25 +89,21 @@ product, such as honey or fruits.
 
 We store these pieces of information per ingredient type:
 
-* manufacturer
+* manufacturer (third party)
 * product name
 * default package units
 * default package amount
 
-## Manufacturer
+## Third Party
 
 * name
-* manufacturer ID in manufacturer database (future use)
-
-## Supplier
-
-* name
-* phone number
-* address
-* email address
-* homepage
-* our customer id
-* supplier ID in supplier database (future use)
+* contact name
+* address, zip, city, country
+* phone
+* email
+* homepage URL
+* our ID with them
+* CRM ID
 
 ## Production Batches
 

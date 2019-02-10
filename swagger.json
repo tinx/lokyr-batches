@@ -953,7 +953,7 @@ paths:
           description: "successful operation"
           schema:
             $ref: "#/definitions/thirdParty"
-  "/eventType/{thirdParytId}":
+  "/thirdParty/{thirdPartyId}":
     get:
       tags:
         - "third party"
@@ -962,7 +962,7 @@ paths:
       description: >
         Fetch information on a specific event type.
       parameters:
-        - name: "eventTypeId"
+        - name: "thirdPartyId"
           in: "path"
           description: "ID of the third party."
           required: true
@@ -1012,13 +1012,13 @@ paths:
       operationId: "thirdPartyDelete"
       summary: "Delete third party"
       description: >
-        Removes the record of the third paryt. This operation
+        Removes the record of the third party. This operation
         is only possible if there are no other records linked to
         this one.
       parameters:
         - name: "thirdPartyId"
           in: "path"
-          description: "ID of the third paryt to delete."
+          description: "ID of the third party to delete."
           required: true
           type: "integer"
           format: "uint64"
@@ -1029,6 +1029,116 @@ paths:
           description: "invalid ID supplied"
         404:
           description: "third party not found"
+  "/ingredient":
+    get:
+      tags:
+        - "ingredient"
+      operationId: "ingredientList"
+      summary: >
+        Retrieve a list of all registered ingredients.
+      parameters: []
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: '#/definitions/ingredient'
+    post:
+      tags:
+        - "ingredient"
+      operationId: "ingredientCreate"
+      summary: "Add a new ingredient"
+      description: >
+        Create a new ingredient record and insert it into the database.
+      parameters:
+        - name: "body"
+          in: "body"
+          description: "ingredient object."
+          required: true
+          schema:
+            $ref: '#/definitions/ingredient'
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/ingredient"
+  "/ingredient/{ingredientId}":
+    get:
+      tags:
+        - "ingredient"
+      operationId: "ingredientRead"
+      summary: "Read ingredient"
+      description: >
+        Fetch information on a specific ingredient.
+      parameters:
+        - name: "ingredientId"
+          in: "path"
+          description: "ID of the ingredient."
+          required: true
+          type: "integer"
+          format: "uint64"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/ingredient"
+        400:
+          description: "Invalid ingredientId supplied."
+        404:
+          description: "ingredient not found."
+    put:
+      tags:
+        - "ingredient"
+      operationId: "ingredientUpdate"
+      summary: "Update ingredient"
+      description: >
+        Update ingredient properties.
+      parameters:
+        - name: "ingredientId"
+          in: "path"
+          description: "ID of the ingredient to update."
+          required: true
+          type: "integer"
+          format: "uint64"
+        - name: "body"
+          in: "body"
+          description: "ingredient object."
+          required: true
+          schema:
+            $ref: '#/definitions/ingredient'
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/ingredient"
+        400:
+          description: "Invalid ingredientId supplied."
+        404:
+          description: "ingredient not found."
+    delete:
+      tags:
+        - "ingredient"
+      operationId: "ingredientDelete"
+      summary: "Delete ingredient"
+      description: >
+        Removes the record of the ingredient. This operation
+        is only possible if there are no other records linked to
+        this one.
+      parameters:
+        - name: "ingredientId"
+          in: "path"
+          description: "ID of the ingredient to delete."
+          required: true
+          type: "integer"
+          format: "uint64"
+      responses:
+        200:
+          description: "successful operation"
+        400:
+          description: "invalid ID supplied"
+        404:
+          description: "ingredient not found"
 definitions:
   productionBatch:
     type: "object"
@@ -1345,4 +1455,36 @@ definitions:
           will be merged.
         additionalProperties:
           type: "string"
+  ingredient:
+    type: "object"
+    required:
+      - manufacturerId
+      - name
+    properties:
+      id:
+        type: "integer"
+        format: "uint64"
+        title: "ID of this ingredient."
+        readOnly: true
+      name:
+        type: "string"
+        title: "name of the ingredient."
+      manufacturerId:
+        type: "integer"
+        format: "uint64"
+        title: "thirdPartyId of the manufacturer"
+      defaultPackageUnit:
+        type: "string"
+        title: "The unit this ingredient should be counted in."
+        enum:
+          - "pieces"
+          - "ml"
+          - "l"
+          - "mg"
+          - "g"
+          - "kg"
+      defaultPackageAmount:
+        type: "number"
+        format: "double"
+        title: "Number of units in a typical batch."
 
