@@ -14,8 +14,7 @@ between those.
 
 ## License
 
-I haven't chosen a license, yet. So for now, it should probably be considered
-"proprietary".
+[Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.html)
 
 ## Author
 
