@@ -1726,7 +1726,26 @@ definitions:
         readOnly: true
       type:
         title: "Event type."
-        $ref: '#/definitions/eventType'
+        type: "string"
+        enum:
+          - "production/setup"
+          - "production/fermentation start"
+          - "production/fermentation stop"
+          - "production/filtering"
+          - "production/racking"
+          - "production/bottling"
+          - "production/labeling"
+          - "measurement/volume"
+          - "measurement/temperature"
+          - "measurement/acidity"
+          - "measurement/alcohol"
+          - "measurement/methanol"
+          - "measurement/ethanol"
+          - "measurement/CO2 production"
+          - "measurement/inspection"
+          - "measurement/tasting"
+          - "note"
+          - "other"
       dateTime:
         type: "string"
         format: "dateTime"
@@ -1742,27 +1761,6 @@ definitions:
           will be merged.
         additionalProperties:
           type: "string"
-  eventType:
-    type: "string"
-    enum:
-      - "production/setup"
-      - "production/fermentation start"
-      - "production/fermentation stop"
-      - "production/filtering"
-      - "production/racking"
-      - "production/bottling"
-      - "production/labeling"
-      - "measurement/volume"
-      - "measurement/temperature"
-      - "measurement/acidity"
-      - "measurement/alcohol"
-      - "measurement/methanol"
-      - "measurement/ethanol"
-      - "measurement/CO2 production"
-      - "measurement/inspection"
-      - "measurement/tasting"
-      - "note"
-      - "other"
   shipment:
     type: "object"
     required:
