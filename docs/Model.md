@@ -138,6 +138,7 @@ We store these pieces of information per production batch:
 * bottling date
 * best before date
 * alcohol content
+* retainedSamples
 * properties (arbitrary key-value data, stored as JSON string)
 
 Production batches SHOULD be referenced to have:
@@ -200,10 +201,3 @@ bottling, filtering steps, rackings, fermentation start, etc.
 * recipient name
 * recipient address
 * recipient ID in CRM (future use)
-
-## Sample
-
-* production batch
-* sample date
-* sample purpose (one of "lab analysis", "retained sample")
-

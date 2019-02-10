@@ -101,8 +101,8 @@ paths:
         Update production batch properties.
 
         Setting the status to 'bottled' is a special operation and
-        requires also setting the 'bottlingDate', 'bestBeforeDate' and
-        'alcoholContent' fields.
+        requires also setting the 'bottlingDate', 'bestBeforeDate',
+        'retainedSamples' and 'alcoholContent' fields.
 
         These three fields can only be set when the status is being
         changed to 'bottled'. 'alcoholContent' can also be changed
@@ -799,7 +799,7 @@ definitions:
         title: "IDs of child batches."
         description: >
           A list of batch IDs referencing production batches that have
-          been created by splitting off amounts off of this batch.
+          been created by splitting amounts off of this batch.
         readOnly: true
       status:
         type: "string"
@@ -810,7 +810,7 @@ definitions:
           progression.
 
           Changing the status to 'bottled' requires also updating
-          the fields 'bottlingDate', 'bestBeforeDate' and
+          the fields 'bottlingDate', 'bestBeforeDate', 'retainedSamples' and
           'alcoholContent' in the same request.
         enum:
           - "setup"
@@ -849,6 +849,18 @@ definitions:
 
           Information on the alcohol content at other times during the
           production process can be recorded as a 'measurement' entry.
+      retainedSamples:
+        type: "integer"
+        format: "uint64"
+        title: "Number of retained samples."
+        description: >
+          When a production batch is bottled, a sample must be retained.
+          This property serves as a counter of retained samples, as well
+          as a reminder to put a sample aside. In all client implementations,
+          the user should have to manually set this value to at least one.
+          Changing the state of a production batch to 'bottled' without
+          also setting retainedSamples to at least one will result in
+          an error.
       properties:
         type: "object"
         title: "Arbitrary key-value data."
