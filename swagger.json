@@ -24,6 +24,129 @@ info:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
 paths:
+  "/batch/ingredient":
+    get:
+      tags:
+        - "ingredient batch"
+      operationId: "ingredientBatchList"
+      summary: "List all ingredient batches"
+      description: >
+        This returns a list of ingredient batches. There is no
+        pagination. The entire list will be returned in one response.
+        The list will only contain those batches that the user has
+        access to.
+      parameters: []
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/ingredientBatch"
+    post:
+      tags:
+        - "ingredient batch"
+      operationId: "ingredientBatchCreate"
+      summary: "Add a new ingredient batch"
+      description: >
+        Create a new ingredient batch record and insert it into the
+        database. The initial status will be 'in stock'. If no batch name is
+        specified, a name will be auto-generated.
+      parameters:
+        - name: "body"
+          in: "body"
+          description: "Batch ingredient object."
+          required: true
+          schema:
+            $ref: '#/definitions/ingredientBatch'
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/ingredientBatch"
+        400:
+          description: "Invalid batch data supplied."
+        404:
+          description: "productId not found."
+  "/batch/ingredient/{batchId}":
+    get:
+      tags:
+        - "ingredient batch"
+      operationId: "ingredientBatchRead"
+      summary: "Read ingredient batch"
+      description: >
+        Fetch information on a specific ingredient batch.
+      parameters:
+        - name: "batchId"
+          in: "path"
+          description: "ID of the batch to fetch."
+          required: true
+          type: "integer"
+          format: "uint64"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/ingredientBatch"
+        400:
+          description: "Invalid batchId supplied."
+        404:
+          description: "batch not found."
+    put:
+      tags:
+        - "ingredient batch"
+      operationId: "ingredientBatchUpdate"
+      summary: "Update ingredient batch"
+      description: >
+        Update ingredient batch properties.
+      parameters:
+        - name: "batchId"
+          in: "path"
+          description: "ID of the batch to update."
+          required: true
+          type: "integer"
+          format: "uint64"
+        - name: "body"
+          in: "body"
+          description: "Batch ingredient object."
+          required: true
+          schema:
+            $ref: '#/definitions/ingredientBatch'
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/ingredientBatch"
+        400:
+          description: "Invalid values supplied."
+        404:
+          description: "batch not found."
+    delete:
+      tags:
+        - "ingredient batch"
+      operationId: "ingredientBatchDelete"
+      summary: "Delete ingredient batch"
+      description: >
+        Removes the record of the ingredient batch. This operation
+        is only possible if there are no other records linked to
+        this one.
+
+        If any inspection reports, documents, split batches or other
+        records reference a ingredient batch, it can not be deleted.
+      parameters:
+        - name: "batchId"
+          in: "path"
+          description: "ID of the batch to delete."
+          required: true
+          type: "integer"
+          format: "uint64"
+      responses:
+        200:
+          description: "successful operation"
+        400:
+          description: "invalid ID supplied"
+        404:
+          description: "batch not found"
   "/batch/production":
     get:
       tags:
@@ -1472,7 +1595,10 @@ definitions:
       manufacturerId:
         type: "integer"
         format: "uint64"
-        title: "thirdPartyId of the manufacturer"
+        title: "thirdPartyId of the manufacturer."
+      manufacturerBatchName:
+        type: "string"
+        title: "Batch designation by the manufacturer."
       defaultPackageUnit:
         type: "string"
         title: "The unit this ingredient should be counted in."
@@ -1487,4 +1613,76 @@ definitions:
         type: "number"
         format: "double"
         title: "Number of units in a typical batch."
+  ingredientBatch:
+    type: "object"
+    required:
+      - ingredientId
+      - supplierId
+      - deliveryDate
+      - unit
+      - amount
+      - bestBeforeDate
+    properties:
+      id:
+        type: "integer"
+        format: "uint64"
+        title: "ID of this ingredient batch."
+        readOnly: true
+      ingredientId:
+        type: "integer"
+        format: "uint64"
+        title: "ID of the type of ingredient."
+      name:
+        type: "string"
+        title: "Name of this batch."
+      supplierId:
+        type: "integer"
+        format: "uint64"
+        title: "thirdPartyID of the supplier."
+      deliveryDate:
+        type: "string"
+        format: "date"
+        title: "Date of delivery of this batch."
+      unit:
+        type: "string"
+        title: "The unit this ingredient was delivered in."
+        enum:
+          - "pieces"
+          - "ml"
+          - "l"
+          - "mg"
+          - "g"
+          - "kg"
+      amount:
+        type: "integer"
+        format: "uint64"
+        title: "Amount of units delivered in this batch."
+      bestBeforeDate:
+        type: "string"
+        format: "date"
+        title: "Guaranteed minimum shelf life."
+        description: >
+          Guaranteed 'best before' date for this batch.
+      status:
+        type: "string"
+        title: "Availability status of this batch."
+        description: >
+          This describes the ingredient availability status of this
+          batch. The status can only be updated following the forward
+          progression.
+        enum:
+          - "ordered"
+          - "in stock"
+          - "gone"
+      properties:
+        type: "object"
+        title: "Arbitrary key-value data."
+        description: >
+          Arbitrary data to be stored for this batch. Key and value have
+          to be strings. Storing an empty value ("") will remove the
+          key entirely.
+          Omitting existing keys does not remove them. The property maps
+          will be merged.
+        additionalProperties:
+          type: "string"
 
