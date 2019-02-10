@@ -51,15 +51,11 @@ Ingredient batches SHOULD be referenced to have:
 ## Documment
 
 * document type
-* title
+* name
 * upload date
 * S3 bucket
 * Object ID ("key" in AWS-speak)
 * URL
-
-## Document Type
-
-* name
 
 ## Ingredient Batch Document
 
@@ -143,8 +139,6 @@ We store these pieces of information per production batch:
 
 Production batches SHOULD be referenced to have:
 
-* retained sample (sample)
-* lab sample (sample)
 * laboratory result reports (document)
 * fermentation start (event)
 * alcohol measurement (event)
@@ -190,7 +184,7 @@ bottling, filtering steps, rackings, fermentation start, etc.
 ## Event Type
 
 * name
-* class (one of "measurement", "production step", "other")
+* class (one of "measurement", "production step", "note", "other")
 
 ## Shipments
 
