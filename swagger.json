@@ -134,7 +134,7 @@ paths:
           description: "invalid ID supplied"
         404:
           description: "ingredient not found"
-  "/batch/ingredient":
+  "/ingredientBatch":
     get:
       tags:
         - "ingredient batch"
@@ -178,7 +178,7 @@ paths:
           description: "Invalid batch data supplied."
         404:
           description: "productId not found."
-  "/batch/ingredient/{batchId}":
+  "/ingredientBatch/{batchId}":
     get:
       tags:
         - "ingredient batch"
@@ -257,7 +257,7 @@ paths:
           description: "invalid ID supplied"
         404:
           description: "batch not found"
-  "/batch/ingredient/{batchId}/event":
+  "/ingredientBatch/{batchId}/event":
     get:
       tags:
         - "ingredient batch event"
@@ -324,7 +324,7 @@ paths:
           description: "Invalid batchId supplied."
         404:
           description: "batch not found."
-  "/batch/ingredient/{batchId}/event/{eventId}":
+  "/ingredientBatch/{batchId}/event/{eventId}":
     get:
       tags:
         - "ingredient batch event"
@@ -414,7 +414,7 @@ paths:
           description: "Invalid batchId or eventId supplied."
         404:
           description: "batch or event not found."
-  "/batch/ingredient/{batchId}/document":
+  "/ingredientBatch/{batchId}/document":
     get:
       tags:
         - "ingredient batch document"
@@ -485,7 +485,7 @@ paths:
           description: "Invalid batchId supplied."
         404:
           description: "batch not found."
-  "/batch/ingredient/{batchId}/document/{documentId}":
+  "/ingredientBatch/{batchId}/document/{documentId}":
     get:
       tags:
         - "ingredient batch document"
@@ -689,7 +689,7 @@ paths:
           description: "invalid ID supplied"
         404:
           description: "product not found"
-  "/batch/production":
+  "/productionBatch":
     get:
       tags:
         - "production batch"
@@ -733,7 +733,7 @@ paths:
           description: "Invalid batch size supplied."
         404:
           description: "productId not found."
-  "/batch/production/{batchId}":
+  "/productionBatch/{batchId}":
     get:
       tags:
         - "production batch"
@@ -820,7 +820,7 @@ paths:
           description: "invalid ID supplied"
         404:
           description: "batch not found"
-  "/batch/production/{batchId}/split":
+  "/productionBatch/{batchId}/split":
     post:
       tags:
         - "production batch"
@@ -857,7 +857,7 @@ paths:
           description: "Invalid batchId or size supplied."
         404:
           description: "batch not found."
-  "/batch/production/{batchId}/blend":
+  "/productionBatch/{batchId}/blend":
     post:
       tags:
         - "production batch"
@@ -895,7 +895,7 @@ paths:
           description: "Invalid batchId supplied."
         404:
           description: "batch not found."
-  "/batch/production/{batchId}/event":
+  "/productionBatch/{batchId}/event":
     get:
       tags:
         - "production batch event"
@@ -962,7 +962,7 @@ paths:
           description: "Invalid batchId supplied."
         404:
           description: "batch not found."
-  "/batch/production/{batchId}/event/{eventId}":
+  "/productionBatch/{batchId}/event/{eventId}":
     get:
       tags:
         - "production batch event"
@@ -1052,7 +1052,7 @@ paths:
           description: "Invalid batchId or eventId supplied."
         404:
           description: "batch or event not found."
-  "/batch/production/{batchId}/shipment":
+  "/productionBatch/{batchId}/shipment":
     get:
       tags:
         - "production batch shipment"
@@ -1105,7 +1105,7 @@ paths:
           description: "Invalid batchId supplied."
         404:
           description: "batch not found."
-  "/batch/production/{batchId}/shipment/{shipmentId}":
+  "/productionBatch/{batchId}/shipment/{shipmentId}":
     get:
       tags:
         - "production batch shipment"
@@ -1199,7 +1199,7 @@ paths:
           description: "Invalid batchId or shipmentId supplied."
         404:
           description: "batch or shipment not found."
-  "/batch/production/{batchId}/document":
+  "/productionBatch/{batchId}/document":
     get:
       tags:
         - "production batch document"
@@ -1270,7 +1270,7 @@ paths:
           description: "Invalid batchId supplied."
         404:
           description: "batch not found."
-  "/batch/production/{batchId}/document/{documentId}":
+  "/productionBatch/{batchId}/document/{documentId}":
     get:
       tags:
         - "production batch document"
@@ -1725,6 +1725,7 @@ definitions:
         title: "ID of this event."
         readOnly: true
       type:
+        title: "Event type."
         $ref: '#/definitions/eventType'
       dateTime:
         type: "string"
@@ -1743,7 +1744,6 @@ definitions:
           type: "string"
   eventType:
     type: "string"
-    title: "Event type."
     enum:
       - "production/setup"
       - "production/fermentation start"
