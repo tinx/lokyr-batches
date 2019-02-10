@@ -918,7 +918,117 @@ paths:
         400:
           description: "invalid ID supplied"
         404:
-          description: "product not found"
+          description: "event type not found"
+  "/thirdParty":
+    get:
+      tags:
+        - "third party"
+      operationId: "thirdPartyList"
+      summary: >
+        Retrieve a list of all registered third parties.
+      parameters: []
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: '#/definitions/thirdParty'
+    post:
+      tags:
+        - "third party"
+      operationId: "thirdPartyCreate"
+      summary: "Add a new third party"
+      description: >
+        Create a new third party record and insert it into the database.
+      parameters:
+        - name: "body"
+          in: "body"
+          description: "thirdParty object."
+          required: true
+          schema:
+            $ref: '#/definitions/thirdParty'
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/thirdParty"
+  "/eventType/{thirdParytId}":
+    get:
+      tags:
+        - "third party"
+      operationId: "thirdPartyRead"
+      summary: "Read event type"
+      description: >
+        Fetch information on a specific event type.
+      parameters:
+        - name: "eventTypeId"
+          in: "path"
+          description: "ID of the third party."
+          required: true
+          type: "integer"
+          format: "uint64"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/thirdParty"
+        400:
+          description: "Invalid thirdPartyId supplied."
+        404:
+          description: "third party not found."
+    put:
+      tags:
+        - "third party"
+      operationId: "thirdPartyUpdate"
+      summary: "Update third party"
+      description: >
+        Update third party properties.
+      parameters:
+        - name: "thirdPartyId"
+          in: "path"
+          description: "ID of the third party to update."
+          required: true
+          type: "integer"
+          format: "uint64"
+        - name: "body"
+          in: "body"
+          description: "thirdParty object."
+          required: true
+          schema:
+            $ref: '#/definitions/thirdParty'
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/thirdParty"
+        400:
+          description: "Invalid thirdPartyId supplied."
+        404:
+          description: "third party not found."
+    delete:
+      tags:
+        - "third party"
+      operationId: "thirdPartyDelete"
+      summary: "Delete third party"
+      description: >
+        Removes the record of the third paryt. This operation
+        is only possible if there are no other records linked to
+        this one.
+      parameters:
+        - name: "thirdPartyId"
+          in: "path"
+          description: "ID of the third paryt to delete."
+          required: true
+          type: "integer"
+          format: "uint64"
+      responses:
+        200:
+          description: "successful operation"
+        400:
+          description: "invalid ID supplied"
+        404:
+          description: "third party not found"
 definitions:
   productionBatch:
     type: "object"
@@ -1106,8 +1216,7 @@ definitions:
   shipment:
     type: "object"
     required:
-      - name
-      - address
+      - thirdPartyId
       - productionBatchId
       - date
       - units
@@ -1122,19 +1231,10 @@ definitions:
         type: "integer"
         format: "uint64"
         title: "Production batch ID."
-      name:
-        type: "string" 
-        title: "Name of the recipient."
-      address:
-        type: "string" 
-        title: "Address of the recipient."
-      recipientId:
-        type: "string"
-        title: "Reference ID for recipient (future use)"
-        description: >
-          This property is for future use. At the moment there is no
-          CRM or address database to link to, but if one were added,
-          this ID could be used to reference records in that system.
+      thirdPartyId:
+        type: "integer"
+        format: "uint64"
+        title: "ID of this shipment."
       date:
         type: "string"
         format: "date"
@@ -1189,4 +1289,60 @@ definitions:
         type: "string"
         format: "date"
         title: "Day of document upload."
+  thirdParty:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "uint64"
+        title: "ID of this party."
+        readOnly: true
+      name:
+        type: "string" 
+        title: "Name of the organization or person."
+      contact:
+        type: "string" 
+        title: "Contact name of the third party."
+      address:
+        type: "string" 
+        title: "Address of the third party."
+      city:
+        type: "string" 
+        title: "City of the third party."
+      zip:
+        type: "string" 
+        title: "Zip code of the third party."
+      country:
+        type: "string" 
+        title: "Country of the third party."
+      phone:
+        type: "string" 
+        title: "Phone number of the third party."
+      email:
+        type: "string" 
+        title: "Email address of the third party."
+      homepage:
+        type: "string" 
+        title: "Homepage URL of the third party."
+      ourId:
+        type: "string" 
+        title: "How they refer to us."
+      thirdPartyId:
+        type: "string"
+        title: "Reference ID for third party (future use)"
+        description: >
+          This property is for future use. At the moment there is no
+          CRM or address database to link to, but if one were added,
+          this ID could be used to reference records in that system.
+      properties:
+        type: "object"
+        title: "Arbitrary key-value data."
+        description: >
+          Arbitrary data to be stored for this shipment. Key and value have
+          to be strings. Storing an empty value ("") will remove the
+          key entirely.
+          Omitting existing keys does not remove them. The property maps
+          will be merged.
+        additionalProperties:
+          type: "string"
 
