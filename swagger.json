@@ -147,6 +147,328 @@ paths:
           description: "invalid ID supplied"
         404:
           description: "batch not found"
+  "/batch/ingredient/{batchId}/event":
+    get:
+      tags:
+        - "ingredient batch event"
+      operationId: "ingredientBatchEventList"
+      summary: "Get a list of ingredient batch events."
+      parameters:
+        - name: "batchId"
+          in: "path"
+          description: "ID of the ingredient batch."
+          required: true
+          type: "integer"
+          format: "uint64"
+        - name: "class"
+          in: "query"
+          description: "Event classes to filter by."
+          type: "array"
+          items:
+            type: "string"
+            enum:
+              - "measurement"
+              - "ingredient step"
+              - "note"
+              - "other"
+          collectionFormat: "multi"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/event"
+        400:
+          description: "Invalid batchId supplied."
+        404:
+          description: "batch not found."
+    post:
+      tags:
+        - "ingredient batch event"
+      operationId: "ingredientBatchEventCreate"
+      summary: "Add ingredient batch event"
+      description: >
+        Add an event record to a ingredient batch. The event type data
+        is a list of keys and values and will be interpreted in different
+        ways, depending on the event type.
+      parameters:
+        - name: "batchId"
+          in: "path"
+          description: "ID of the batch."
+          required: true
+          type: "integer"
+          format: "uint64"
+        - name: "body"
+          in: "body"
+          description: "The event record to add."
+          required: true
+          schema:
+            $ref: '#/definitions/event'
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/event"
+        400:
+          description: "Invalid batchId supplied."
+        404:
+          description: "batch not found."
+  "/batch/ingredient/{batchId}/event/{eventId}":
+    get:
+      tags:
+        - "ingredient batch event"
+      operationId: "ingredientBatchEventRead"
+      summary: "Fetch an ingredient batch event."
+      parameters:
+        - name: "batchId"
+          in: "path"
+          description: "ID of the ingredient batch."
+          required: true
+          type: "integer"
+          format: "uint64"
+        - name: "eventId"
+          in: "path"
+          description: "ID of the event."
+          required: true
+          type: "integer"
+          format: "uint64"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/event"
+        400:
+          description: "Invalid batchId or eventId supplied."
+        404:
+          description: "batch or event not found."
+    put:
+      tags:
+        - "ingredient batch event"
+      operationId: "ingredientBatchEventUpdate"
+      summary: "Update an ingredient batch event."
+      parameters:
+        - name: "batchId"
+          in: "path"
+          description: "ID of the ingredient batch."
+          required: true
+          type: "integer"
+          format: "uint64"
+        - name: "eventId"
+          in: "path"
+          description: "ID of the event."
+          required: true
+          type: "integer"
+          format: "uint64"
+        - name: "body"
+          in: "body"
+          description: "The event record."
+          required: true
+          schema:
+            $ref: '#/definitions/event'
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/event"
+        400:
+          description: "Invalid batchId or eventId supplied."
+        404:
+          description: "batch or event not found."
+    delete:
+      tags:
+        - "ingredient batch event"
+      operationId: "ingredientBatchEventDelete"
+      summary: "Delete an ingredient batch event."
+      parameters:
+        - name: "batchId"
+          in: "path"
+          description: "ID of the ingredient batch."
+          required: true
+          type: "integer"
+          format: "uint64"
+        - name: "eventId"
+          in: "path"
+          description: "ID of the event."
+          required: true
+          type: "integer"
+          format: "uint64"
+      responses:
+        200:
+          description: "successful operation"
+        400:
+          description: "Invalid batchId or eventId supplied."
+        404:
+          description: "batch or event not found."
+  "/batch/ingredient/{batchId}/document":
+    get:
+      tags:
+        - "ingredient batch document"
+      operationId: "ingredientBatchDocumentList"
+      summary: "Get a list of ingredient batch documents."
+      parameters:
+        - name: "batchId"
+          in: "path"
+          description: "ID of the ingredient batch."
+          required: true
+          type: "integer"
+          format: "uint64"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/document"
+        400:
+          description: "Invalid batchId supplied."
+        404:
+          description: "batch not found."
+    post:
+      tags:
+        - "ingredient batch document"
+      operationId: "ingredientBatchDocumentCreate"
+      summary: "Add ingredient batch document"
+      description: >
+        Add a document record to a ingredient batch.
+      consumes:
+        - "multipart/form-data"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "batchId"
+          in: "path"
+          description: "ID of the batch."
+          required: true
+          type: "integer"
+          format: "uint64"
+        - name: "name"
+          in: "formData"
+          description: "The name of the document to add."
+          type: "string"
+        - name: "type"
+          in: "formData"
+          type: "string" 
+          description: "The type of document to add."
+          enum:
+            - "photo"
+            - "video"
+            - "invoice"
+            - "delivery note"
+            - "lab report"
+            - "other"
+          required: true
+        - name: "file"
+          type: "file"
+          in: "formData"
+          description: "The document content."
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/document"
+        400:
+          description: "Invalid batchId supplied."
+        404:
+          description: "batch not found."
+  "/batch/ingredient/{batchId}/document/{documentId}":
+    get:
+      tags:
+        - "ingredient batch document"
+      operationId: "ingredientBatchDocumentRead"
+      summary: "Fetch an ingredient batch document."
+      parameters:
+        - name: "batchId"
+          in: "path"
+          description: "ID of the ingredient batch."
+          required: true
+          type: "integer"
+          format: "uint64"
+        - name: "documentId"
+          in: "path"
+          description: "ID of the document."
+          required: true
+          type: "integer"
+          format: "uint64"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/document"
+        400:
+          description: "Invalid batchId or documentId supplied."
+        404:
+          description: "batch or document not found."
+    put:
+      tags:
+        - "ingredient batch document"
+      operationId: "ingredientBatchDocumentUpdate"
+      summary: "Update an ingredient batch document."
+      parameters:
+        - name: "batchId"
+          in: "path"
+          description: "ID of the ingredient batch."
+          required: true
+          type: "integer"
+          format: "uint64"
+        - name: "documentId"
+          in: "path"
+          description: "ID of the document."
+          required: true
+          type: "integer"
+          format: "uint64"
+        - name: "body"
+          in: "body"
+          description: "The document record."
+          required: true
+          schema:
+            $ref: '#/definitions/document'
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/document"
+        400:
+          description: "Invalid batchId or documentId supplied."
+        404:
+          description: "batch or document not found."
+    delete:
+      tags:
+        - "ingredient batch document"
+      operationId: "ingredientBatchDocumentDelete"
+      summary: "Delete an ingredient batch document."
+      description: >
+        Removes the record of the document. This operation
+        is only possible if there are no other records linked to
+        this one.
+      parameters:
+        - name: "batchId"
+          in: "path"
+          description: "ID of the ingredient batch."
+          required: true
+          type: "integer"
+          format: "uint64"
+        - name: "documentId"
+          in: "path"
+          description: "ID of the document."
+          required: true
+          type: "integer"
+          format: "uint64"
+      responses:
+        200:
+          description: "successful operation"
+        400:
+          description: "Invalid batchId or documentId supplied."
+        404:
+          description: "batch or document not found."
   "/batch/production":
     get:
       tags:
